@@ -19,9 +19,13 @@ public class Triangle : IGeometricShape
         double edgeB,
         double edgeC)
     {
-        EdgeA = edgeA;
-        EdgeB = edgeB;
-        EdgeC = edgeC;
+        ValidateEdge(edgeA, nameof(EdgeA));
+        ValidateEdge(edgeB, nameof(EdgeB));
+        ValidateEdge(edgeC, nameof(EdgeC));
+        
+        _edgeA = edgeA;
+        _edgeB = edgeB;
+        _edgeC = edgeC;
     }
     
     
@@ -32,7 +36,7 @@ public class Triangle : IGeometricShape
         get => _edgeA;
         set
         {
-            if (value <= 0) throw new ArgumentOutOfRangeException(nameof(EdgeA));
+            ValidateEdge(value, nameof(EdgeA));
             _edgeA = value;
         } 
     }
@@ -44,7 +48,7 @@ public class Triangle : IGeometricShape
         get => _edgeB;
         set
         {
-            if (value <= 0) throw new ArgumentOutOfRangeException(nameof(EdgeB));
+            ValidateEdge(value, nameof(EdgeB));
             _edgeB = value;
         } 
     }
@@ -56,7 +60,7 @@ public class Triangle : IGeometricShape
         get => _edgeC;
         set
         {
-            if (value <= 0) throw new ArgumentOutOfRangeException(nameof(EdgeC));
+            ValidateEdge(value, nameof(EdgeC));
             _edgeC = value;
         } 
     }
@@ -68,9 +72,9 @@ public class Triangle : IGeometricShape
     {
         get
         {
-            double sqrEdgeA = Math.Pow(EdgeA, 2);
-            double sqrEdgeB = Math.Pow(EdgeB, 2);
-            double sqrEdgeC = Math.Pow(EdgeC, 2);
+            double sqrEdgeA = Math.Pow(_edgeA, 2);
+            double sqrEdgeB = Math.Pow(_edgeB, 2);
+            double sqrEdgeC = Math.Pow(_edgeC, 2);
 
             double maxSqrEdge = Math.Max(sqrEdgeA, Math.Max(sqrEdgeB, sqrEdgeC));
             double sumOtherEdges = sqrEdgeA + sqrEdgeB + sqrEdgeC - maxSqrEdge;
@@ -85,9 +89,17 @@ public class Triangle : IGeometricShape
     /// <inheritdoc />>
     public double CalculateArea()
     {
-        double p = (EdgeA + EdgeB + EdgeC) / 2;
-        double area = Math.Sqrt(p * (p - EdgeA) * (p - EdgeB) * (p - EdgeC));
+        double p = (_edgeA + _edgeB + _edgeC) / 2;
+        double area = Math.Sqrt(p * (p - _edgeA) * (p - _edgeB) * (p - _edgeC));
         
         return area;
+    }
+    
+    private void ValidateEdge(double edge, string paramName)
+    {
+        if (edge <= 0)
+        {
+            throw new ArgumentOutOfRangeException(paramName, "Длина стороны должна быть положительным числом.");
+        }
     }
 }

@@ -15,7 +15,9 @@ public class Circle : IGeometricShape
     /// <param name="radius">Радиус</param>
     public Circle(double radius)
     {
-        Radius = radius;
+        ValidateRadius(radius, nameof(Radius));
+        
+        _radius = radius;
     }
     
     
@@ -27,7 +29,7 @@ public class Circle : IGeometricShape
         get => _radius;
         set
         {
-            if (value <= 0) throw new ArgumentOutOfRangeException(nameof(Radius));
+            ValidateRadius(value, nameof(Radius));
             _radius = value;
         }
     }
@@ -36,8 +38,16 @@ public class Circle : IGeometricShape
     /// <inheritdoc />>
     public double CalculateArea()
     {
-        double area = Math.PI * Math.Pow(Radius, 2);
+        double area = Math.PI * Math.Pow(_radius, 2);
 
         return area;
+    }
+    
+    private void ValidateRadius(double radius, string paramName)
+    {
+        if (radius <= 0)
+        {
+            throw new ArgumentOutOfRangeException(paramName, "Радиус должен быть положительным числом.");
+        }
     }
 }
